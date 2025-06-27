@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bangladesh Map - Flights</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-sA+rqwqQ5ZXT9OkQnHr8fhFvCSPgV7mdOd5JbP7rC4M="
+          crossorigin=""/>
+    <style>
+        #map { height: 600px; width: 100%; }
+    </style>
+</head>
+<body>
+
+<h1>Flights Map - Bangladesh</h1>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-pD8LlZ6/JvW6lSLm0E0tzSmTlnqE3dsoCD+PMGujbSU="
+        crossorigin=""></script>
+
+<script>
+    // Initialize map centered on Bangladesh (lat, lon)
+    var map = L.map('map').setView([23.685, 90.3563], 7); // zoom 7 is good for country-level
+
+    // Add OSM tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+</script>
+
+</body>
+</html>
