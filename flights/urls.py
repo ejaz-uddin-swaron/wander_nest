@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import FlightsMapView
+from .views import LocationListView
 
 urlpatterns = [
-    path('', FlightsMapView.as_view(), name='flights_map'),
+    path('locations/', LocationListView.as_view(), name='location-list'),
 ]

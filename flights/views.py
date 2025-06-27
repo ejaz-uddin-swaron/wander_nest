@@ -1,4 +1,7 @@
-from django.views.generic import TemplateView
+from rest_framework.generics import ListAPIView
+from .models import Location
+from .serializers import LocationSerializer
 
-class FlightsMapView(TemplateView):
-    template_name = "flights/map.html"
+class LocationListView(ListAPIView):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
