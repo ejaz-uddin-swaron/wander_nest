@@ -105,7 +105,7 @@ SWAGGER_SETTINGS = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://your-app-name.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://wander-nest-ad3s.onrender.com']
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
