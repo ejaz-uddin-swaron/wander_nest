@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'packages',
     'corsheaders',
     'flights',
+    'currency',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# settings.py
+FREE_CURRENCY_API_KEY = 'fca_live_eHitEpjQm6yKrmFConPEWI7tHAWa6XT01RFlg776'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
