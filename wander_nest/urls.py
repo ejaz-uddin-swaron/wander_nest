@@ -20,15 +20,16 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/auth/', include('authentication.urls')),
-    path('api/home/', include('home.urls')),
-    path("api/packages/", include("packages.urls")),
-    path('api/flights/', include('flights.urls')),
-    path('api/currency/', include('currency.urls')),
+   path('admin/', admin.site.urls),
+   path('api/auth/', include('authentication.urls')),
+   path('api/home/', include('home.urls')),
+   path("api/packages/", include("packages.urls")),
+   path('api/flights/', include('flights.urls')),
+   path('api/currency/', include('currency.urls')),
+   path('api/hotels/', include('hotels.urls')),
 
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

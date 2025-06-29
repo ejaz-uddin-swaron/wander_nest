@@ -6,4 +6,4 @@ from home.models import FeatureDestination
 class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureDestination
-        fields = ['id', 'title', 'pic', 'price']
+        fields = ['id', 'title', 'subtitle', 'pic', 'price']

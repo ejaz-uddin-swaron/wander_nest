@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'flights',
     'currency',
+    'hotels',
 ]
 
 MIDDLEWARE = [
