@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from .serializers import RegistrationSerializer, LoginSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from wander_nest.settings import supabase
+from .models import UserProfile
+
 
 class RegisterView(APIView):
 
@@ -27,33 +28,14 @@ class RegisterView(APIView):
             },
         )
     )
- 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
-
-            supabase_data = {
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "email": user.email,
-                "phone": request.data.get("phone"),
-                "country": request.data.get("country"),
-                "age": request.data.get("age")
-            }
-
-            try:
-                res = supabase.table("users").insert(supabase_data).execute()
-                res.raise_for_status()  # throws if error from Supabase
-            except Exception as e:
-                print(f"Supabase insert failed: {e}")
-
             return Response({'token': token.key}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class LoginView(APIView):
@@ -64,11 +46,10 @@ class LoginView(APIView):
             required=['username', 'password'],
             properties={
                 'username': openapi.Schema(type=openapi.TYPE_STRING),
-                'password': openapi.Schema(type=openapi.TYPE_STRING)
+                'password': openapi.Schema(type=openapi.TYPE_STRING, format='password')
             },
         )
     )
-
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -82,7 +63,7 @@ class LoginView(APIView):
                 'phone': profile.phone if profile else '',
                 'age': profile.age if profile else None
             })
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -94,7 +75,6 @@ class LogoutView(APIView):
         responses={200: openapi.Response("Logged out")},
         security=[{'Token': []}]
     )
-    
     def post(self, request):
         request.user.auth_token.delete()
         return Response({'detail': 'Logged out'}, status=status.HTTP_200_OK)

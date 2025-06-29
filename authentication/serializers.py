@@ -1,11 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import UserProfile
-from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import UserProfile
 from django.contrib.auth.password_validation import validate_password
+from .models import UserProfile  # Make sure this exists
 
 class RegistrationSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(write_only=True)
@@ -30,13 +27,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         validated_data.pop('confirm_password')
 
-        user = User.objects.create(**validated_data)
-        user.set_password(password)
-        user.save()
-
+        user = User.objects.create_user(password=password, **validated_data)  # ✅ securely creates user
         UserProfile.objects.create(user=user, phone=phone, country=country, age=age)
         return user
-
 
 
 class LoginSerializer(serializers.Serializer):
@@ -53,8 +46,6 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=username, password=password)
 
         if not user:
-            raise serializers.ValidationError("Invalid credentials")
+            raise serializers.ValidationError("Invalid credentials.")
 
         return user
-
-
