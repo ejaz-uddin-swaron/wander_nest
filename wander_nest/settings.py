@@ -129,6 +129,4 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Optional currency API key (if used)
-FREE_CURRENCY_API_KEY = 'fca_live_eHitEpjQm6yKrmFConPEWI7tHAWa6XT01RFlg776'
 
