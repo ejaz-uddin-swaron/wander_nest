@@ -10,7 +10,6 @@ from .models import UserProfile
 
 
 class RegisterView(APIView):
-
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -39,7 +38,6 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
-
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -56,6 +54,7 @@ class LoginView(APIView):
             user = serializer.validated_data
             token, _ = Token.objects.get_or_create(user=user)
             profile = getattr(user, 'userprofile', None)
+
             return Response({
                 'token': token.key,
                 'uid': user.id,

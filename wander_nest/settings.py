@@ -7,7 +7,7 @@ environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = env('SECRET_KEY')  # Good — loaded from .env
+SECRET_KEY = env('SECRET_KEY') 
 
 DEBUG = True
 
@@ -75,13 +75,14 @@ WSGI_APPLICATION = 'wander_nest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ejaz_uddin_swaron',
-        'USER': 'ejaz_uddin_swaron_user',
-        'PASSWORD': 'WnqcyfbllMkCbAk28ElQEY8RuLRdYqsB',
-        'HOST': 'dpg-d1gm8sali9vc73arobt0-a',
-        'PORT': '5432',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
+
 
 # Static + Media
 STATIC_URL = 'static/'
@@ -131,8 +132,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Optional currency API key (if used)
 FREE_CURRENCY_API_KEY = 'fca_live_eHitEpjQm6yKrmFConPEWI7tHAWa6XT01RFlg776'
 
-# Supabase — disabled
-# from supabase import create_client, Client
-# SUPABASE_URL = env("SUPABASE_URL")
-# SUPABASE_KEY = env("SUPABASE_KEY")
-# supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)

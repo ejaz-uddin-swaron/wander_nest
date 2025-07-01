@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-from .models import UserProfile  # Make sure this exists
+from .models import UserProfile 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(write_only=True)
@@ -27,7 +27,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         validated_data.pop('confirm_password')
 
-        user = User.objects.create_user(password=password, **validated_data)  # ✅ securely creates user
+        user = User.objects.create_user(password=password, **validated_data) 
         UserProfile.objects.create(user=user, phone=phone, country=country, age=age)
         return user
 
