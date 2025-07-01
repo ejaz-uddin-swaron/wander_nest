@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HeroSection, FeatureDestination, OurService
+from .models import HeroSection, FeatureDestination, OurService, Destination
 
 class HeroSectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,6 +10,11 @@ class FeatureDestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureDestination
         fields = ['id', 'title', 'subtitle', 'pic']
+
+class DestinationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Destination
+        fields = '__all__'
 
 class OurServiceSerializer(serializers.ModelSerializer):
     class Meta:

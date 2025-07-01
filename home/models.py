@@ -11,6 +11,14 @@ class FeatureDestination(models.Model):
     subtitle = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+class Destination(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='destination_images/')
+    description = models.TextField()
+    click = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.name
 
 class OurService(models.Model):
     title = models.CharField(max_length=100)
