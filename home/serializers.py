@@ -9,7 +9,7 @@ class HeroSectionSerializer(serializers.ModelSerializer):
 class FeatureDestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureDestination
-        fields = ['id', 'title', 'subtitle', 'image_url']
+        fields = ['id', 'title', 'subtitle', 'image_url', 'large_description']
 
 class DestinationSerializer(serializers.ModelSerializer):
     class Meta:
