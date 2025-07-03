@@ -1,9 +1,7 @@
-# packages/serializers.py
-
 from rest_framework import serializers
-from home.models import FeatureDestination
+from .models import Package
 
 class PackageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FeatureDestination
-        fields = ['id', 'title', 'subtitle', 'large_description', 'image_url', 'price']
+        model = Package
+        fields = ['id', 'title', 'image_url', 'price', 'destination', 'source', 'days']

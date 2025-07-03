@@ -1,16 +1,11 @@
-from home.models import FeatureDestination
-from home.serializers import FeatureDestinationSerializer
-from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Package
 from .serializers import PackageSerializer
 
-# packages/views.py
-
-class PackageListView(ListAPIView):
-    queryset = FeatureDestination.objects.all()
-    serializer_class = PackageSerializer
-
-class FeatureDestinationListView(ListAPIView):
-    queryset = FeatureDestination.objects.all()
-    serializer_class = FeatureDestinationSerializer
-
-
+class PackageListView(APIView):
+    def get(self, request):
+        packages = Package.objects.all()
+        serializer = PackageSerializer(packages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
