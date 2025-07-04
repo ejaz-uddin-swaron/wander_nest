@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'hotels',
     'restaurants',
     'bookings',
+    'payments',
 
     # Third-party
     'rest_framework',

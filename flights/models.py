@@ -5,7 +5,7 @@ from django.utils import timezone
 import uuid
 
 class Airport(models.Model):
-    code = models.CharField(max_length=10, primary_key=True)  # e.g., DAC, CGP
+    code = models.CharField(max_length=10, primary_key=True)  
     name = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
