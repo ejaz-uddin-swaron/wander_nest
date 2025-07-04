@@ -33,9 +33,9 @@ class SSLCommerzPaymentView(APIView):
             "total_amount": amount,
             "currency": "BDT",
             "tran_id": tran_id,
-            "success_url": "https://example.com/payment-success",
-            "fail_url": "https://example.com/payment-fail",
-            "cancel_url": "https://example.com/payment-cancel",
+            "success_url": "http://localhost:3000/dashboard",
+            "fail_url": "http://localhost:3000/confirm-book",
+            "cancel_url": "http://localhost:3000/hotels-rooms",
             "emi_option": 0,
 
             "cus_name": data.get("customer_name", "Test Customer"),
