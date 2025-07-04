@@ -77,3 +77,74 @@ class LogoutView(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         return Response({'detail': 'Logged out'}, status=status.HTTP_200_OK)
+
+
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+class PasswordResetRequestView(APIView):
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email'],
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, format='email')
+            },
+        )
+    )
+    def post(self, request):
+        email = request.data.get("email")
+        if not email:
+            return Response({"error": "Email is required"}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"message": "If the email exists, a reset link has been sent."}, status=200)
+
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+        reset_link = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+
+        send_mail(
+            subject="Reset Your Wander Nest Password",
+            message=f"Click the link to reset your password:\n{reset_link}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+        )
+
+        return Response({"message": "Reset link sent if email exists."}, status=200)
+
+
+class PasswordResetConfirmView(APIView):
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['password'],
+            properties={
+                'password': openapi.Schema(type=openapi.TYPE_STRING, format='password')
+            },
+        )
+    )
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (User.DoesNotExist, ValueError, TypeError):
+            return Response({"error": "Invalid link"}, status=400)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"error": "Token is invalid or expired"}, status=400)
+
+        password = request.data.get("password")
+        if not password:
+            return Response({"error": "Password is required"}, status=400)
+
+        user.set_password(password)
+        user.save()
+        return Response({"message": "Password reset successfully"}, status=200)
