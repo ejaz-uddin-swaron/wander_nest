@@ -1,28 +1,48 @@
+import uuid
 import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import uuid
+from django.contrib.auth import get_user_model
+from payments.models import Payment
+
+User = get_user_model()
 
 class SSLCommerzPaymentView(APIView):
     def post(self, request):
         data = request.data
-        amount = data.get('amount', 10)  # Default to 10 Taka
+        amount = data.get('amount')
+        user_id = data.get('user_id')
 
-        tran_id = str(uuid.uuid4())  # Generate unique transaction ID
+        if not amount or not user_id:
+            return Response({"error": "user_id and amount are required"}, status=400)
 
-        payment_data = {
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+
+        tran_id = str(uuid.uuid4())
+
+        # ✅ Save to your local DB (Supabase handled by Django DB engine)
+        Payment.objects.create(
+            user=user,
+            amount=amount,
+            tran_id=tran_id,
+            status="Pending"
+        )
+
+        ssl_payload = {
             "store_id": "byteb67e6e2713890c",
             "store_passwd": "byteb67e6e2713890c@ssl",
             "total_amount": amount,
             "currency": "BDT",
             "tran_id": tran_id,
-            "success_url": "https://example.com/payment-success",  # Replace later
+            "success_url": "https://example.com/payment-success",
             "fail_url": "https://example.com/payment-fail",
             "cancel_url": "https://example.com/payment-cancel",
             "emi_option": 0,
 
-            # Customer Info (required)
             "cus_name": "Test Customer",
             "cus_email": "test@email.com",
             "cus_add1": "Dhaka",
@@ -34,7 +54,6 @@ class SSLCommerzPaymentView(APIView):
             "cus_phone": "01711111111",
             "cus_fax": "N/A",
 
-            # Shipping Info (optional but recommended)
             "shipping_method": "NO",
             "ship_name": "Test Customer",
             "ship_add1": "Dhaka",
@@ -44,22 +63,15 @@ class SSLCommerzPaymentView(APIView):
             "ship_postcode": "1212",
             "ship_country": "Bangladesh",
 
-            # Product info
             "product_name": "Wander Tour",
             "product_category": "Tourism",
             "product_profile": "general"
         }
 
-        url = "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"
+        response = requests.post("https://sandbox.sslcommerz.com/gwprocess/v4/api.php", data=ssl_payload)
+        res_data = response.json()
 
-        try:
-            response = requests.post(url, data=payment_data)
-            res_data = response.json()
+        if res_data.get('status') == 'SUCCESS':
+            return Response({"GatewayPageURL": res_data["GatewayPageURL"]})
 
-            if res_data.get('status') == 'SUCCESS':
-                return Response({"GatewayPageURL": res_data['GatewayPageURL']})
-            else:
-                return Response(res_data, status=status.HTTP_400_BAD_REQUEST)
-
-        except requests.exceptions.RequestException as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(res_data, status=400)
