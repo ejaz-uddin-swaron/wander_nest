@@ -54,20 +54,22 @@ class EditProfileSerializer(serializers.ModelSerializer):
     passport_no = serializers.CharField(required=False, allow_blank=True)
     date_of_birth = serializers.DateField(required=False)
     email = serializers.EmailField(required=False)
+    profile_image = serializers.URLField(required=False, allow_blank=True)  # ✅ NEW FIELD
 
     class Meta:
         model = User
-        fields = ['email', 'passport_no', 'date_of_birth']
+        fields = ['email', 'passport_no', 'date_of_birth', 'profile_image']
 
     def update(self, instance, validated_data):
-        # Update only email in User model
+        # Update email
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        # Update UserProfile fields
+        # Update profile fields
         profile, _ = UserProfile.objects.get_or_create(user=instance)
         profile.passport_no = validated_data.get('passport_no', profile.passport_no)
         profile.date_of_birth = validated_data.get('date_of_birth', profile.date_of_birth)
+        profile.profile_image = validated_data.get('profile_image', profile.profile_image)  # ✅
         profile.save()
 
         return instance

@@ -164,5 +164,16 @@ class EditProfileView(APIView):
         serializer = EditProfileSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'Profile updated successfully', 'data': serializer.data})
+
+            profile = user.userprofile  # Make sure profile exists
+            return Response({
+                'message': 'Profile updated successfully',
+                'data': {
+                    'email': user.email,
+                    'passport_no': profile.passport_no,
+                    'date_of_birth': profile.date_of_birth,
+                    'profile_image': profile.profile_image
+                }
+            })
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
