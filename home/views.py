@@ -74,3 +74,14 @@ def increment_click(request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Destination.DoesNotExist:
         return Response({'error': 'Destination not found'}, status=status.HTTP_404_NOT_FOUND)
+
+# views.py
+
+from rest_framework.generics import RetrieveAPIView
+from .models import DestinationDetail
+from .serializers import DestinationDetailSerializer
+
+class DestinationDetailView(RetrieveAPIView):
+    queryset = DestinationDetail.objects.all()
+    serializer_class = DestinationDetailSerializer
+    lookup_field = 'pk'  # matches <int:destination_id> in URL

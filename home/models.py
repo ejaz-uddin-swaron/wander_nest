@@ -25,3 +25,19 @@ class Destination(models.Model):
 class OurService(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.TextField()
+
+class DestinationDetail(models.Model):
+    name = models.CharField(max_length=100)
+    subtitle = models.TextField()
+    description = models.TextField()
+    location = models.CharField(max_length=255)
+    coordinates = models.CharField(max_length=100)
+    bestTime = models.CharField(max_length=100)
+    currency = models.CharField(max_length=50)
+    language = models.CharField(max_length=100)
+    image = models.URLField()
+    heroImage = models.URLField()
+
+    def __str__(self):
+        return self.name
+

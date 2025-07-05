@@ -159,6 +159,7 @@ class EditProfileView(APIView):
         responses={200: openapi.Response("Profile updated")},
         security=[{'Token': []}]
     )
+    
     def patch(self, request):
         user = request.user
         serializer = EditProfileSerializer(user, data=request.data, partial=True)

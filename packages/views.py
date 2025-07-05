@@ -1,11 +1,31 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Package
-from .serializers import PackageSerializer
+from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.permissions import IsAuthenticated
+from .models import TransportOption, HotelOption, GuideOption, Package
+from .serializers import (
+    TransportOptionSerializer,
+    HotelOptionSerializer,
+    GuideOptionSerializer,
+    PackageSerializer,
+    PackageCreateSerializer
+)
 
-class PackageListView(APIView):
-    def get(self, request):
-        packages = Package.objects.all()
-        serializer = PackageSerializer(packages, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class TransportOptionListView(ListAPIView):
+    queryset = TransportOption.objects.all()
+    serializer_class = TransportOptionSerializer
+
+
+class HotelOptionListView(ListAPIView):
+    queryset = HotelOption.objects.all()
+    serializer_class = HotelOptionSerializer
+
+
+class GuideOptionListView(ListAPIView):
+    queryset = GuideOption.objects.all()
+    serializer_class = GuideOptionSerializer
+
+
+class PackageCreateView(CreateAPIView):
+    queryset = Package.objects.all()
+    serializer_class = PackageCreateSerializer
+    permission_classes = [IsAuthenticated]

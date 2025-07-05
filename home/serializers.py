@@ -20,3 +20,16 @@ class OurServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = OurService
         fields = '__all__'
+
+# serializers.py
+
+from .models import DestinationDetail
+
+class DestinationDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DestinationDetail
+        fields = [
+            'id', 'name', 'subtitle', 'description', 'location',
+            'coordinates', 'bestTime', 'currency', 'language',
+            'image', 'heroImage'
+        ]
