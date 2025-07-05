@@ -49,3 +49,25 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials.")
 
         return user
+
+class EditProfileSerializer(serializers.ModelSerializer):
+    passport_no = serializers.CharField(required=False, allow_blank=True)
+    date_of_birth = serializers.DateField(required=False)
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['email', 'passport_no', 'date_of_birth']
+
+    def update(self, instance, validated_data):
+        # Update only email in User model
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+
+        # Update UserProfile fields
+        profile, _ = UserProfile.objects.get_or_create(user=instance)
+        profile.passport_no = validated_data.get('passport_no', profile.passport_no)
+        profile.date_of_birth = validated_data.get('date_of_birth', profile.date_of_birth)
+        profile.save()
+
+        return instance

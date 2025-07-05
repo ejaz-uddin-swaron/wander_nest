@@ -148,3 +148,21 @@ class PasswordResetConfirmView(APIView):
         user.set_password(password)
         user.save()
         return Response({"message": "Password reset successfully"}, status=200)
+
+from .serializers import EditProfileSerializer
+
+class EditProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=EditProfileSerializer,
+        responses={200: openapi.Response("Profile updated")},
+        security=[{'Token': []}]
+    )
+    def patch(self, request):
+        user = request.user
+        serializer = EditProfileSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Profile updated successfully', 'data': serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
