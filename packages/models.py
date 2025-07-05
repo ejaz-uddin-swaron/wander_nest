@@ -70,3 +70,16 @@ class Package(models.Model):
 
     def __str__(self):
         return self.title
+
+class PreMadePackage(models.Model):
+    title = models.CharField(max_length=255)
+    subtitle = models.TextField()
+    image_url = models.URLField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    destination = models.CharField(max_length=255)
+    source = models.CharField(max_length=255)
+    days = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.title
+

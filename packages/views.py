@@ -29,3 +29,11 @@ class PackageCreateView(CreateAPIView):
     queryset = Package.objects.all()
     serializer_class = PackageCreateSerializer
     permission_classes = [IsAuthenticated]
+
+from rest_framework.generics import ListAPIView
+from .models import PreMadePackage
+from .serializers import PreMadePackageSerializer
+
+class PreMadePackageListView(ListAPIView):
+    queryset = PreMadePackage.objects.all()
+    serializer_class = PreMadePackageSerializer

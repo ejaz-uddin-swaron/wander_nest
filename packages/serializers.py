@@ -82,3 +82,11 @@ class PackageCreateSerializer(serializers.ModelSerializer):
             **validated_data
         )
         return pkg
+    
+from rest_framework import serializers
+from .models import PreMadePackage
+
+class PreMadePackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreMadePackage
+        fields = '__all__'

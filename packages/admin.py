@@ -39,3 +39,10 @@ class PackageAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at', 'total_cost']
     ordering = ['-created_at']
 
+from django.contrib import admin
+from .models import PreMadePackage
+
+@admin.register(PreMadePackage)
+class PreMadePackageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'destination', 'price']
+    search_fields = ['title', 'destination']
